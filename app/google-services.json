@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "363488654939",
+    "project_id": "completenotes-37acf",
+    "storage_bucket": "completenotes-37acf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363488654939:android:f5075e101634d25153f17e",
+        "android_client_info": {
+          "package_name": "com.stav.completenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363488654939-jpmohd4d6ce7gehduckandu6b2e2aaq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY-LNToHYyFL36tTCEZC9_9e4D3ZMPA7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363488654939-jpmohd4d6ce7gehduckandu6b2e2aaq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
