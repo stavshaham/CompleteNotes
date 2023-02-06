@@ -58,36 +58,22 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupBtn = findViewById(R.id.signupBtn);
 
-        signupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerOnClick();
-            }
-        });
-
         // Setting up DatePicker on EditText
-        signupDOB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar cal = Calendar.getInstance();
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                int month = cal.get(Calendar.MONTH);
-                int year = cal.get(Calendar.YEAR);
+        signupDOB.setOnClickListener(v -> {
+            final Calendar cal = Calendar.getInstance();
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int month = cal.get(Calendar.MONTH);
+            int year = cal.get(Calendar.YEAR);
 
-                picker = new DatePickerDialog(RegisterActivity.this, R.style.AppTheme_DialogTheme, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        signupDOB.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                    }
-                }, year, month, day);
+            picker = new DatePickerDialog(RegisterActivity.this, R.style.AppTheme_DialogTheme, (view, year1, month1, dayOfMonth) ->
+                    signupDOB.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1), year, month, day);
 
-                picker.show();
-            }
+            picker.show();
         });
     }
 
     // registerOnClick function, set onClick on activity_register.xml in button code.
-    private void registerOnClick() {
+    public void registerOnClick(View view) {
         String email = signupEmail.getText().toString();
         String password = signupPassword.getText().toString();
         String username = signupUsername.getText().toString();
@@ -153,47 +139,37 @@ public class RegisterActivity extends AppCompatActivity {
     private void CreateUser(String email, String password, String username, String gender, String mobile, String dob, String name) {
         firebaseHandler.createAccount(email, password, success -> {
             if (success) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FirebaseUser user = auth.getCurrentUser();
+                runOnUiThread(() -> { // Instead of new runnable, using () because no values needed in runnable
+                    FirebaseUser user = auth.getCurrentUser();
 
-                        // Update Display Name of User
-                        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
-                        user.updateProfile(profileChangeRequest);
+                    // Update Display Name of User
+                    UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+                    user.updateProfile(profileChangeRequest);
 
-                        // Enter data into realtime firebase
-                        ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(username, gender, mobile, dob);
+                    // Enter data into realtime firebase
+                    ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(username, gender, mobile, dob);
 
-                        // Extracting user reference from database for "RegisteredUsers"
-                        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("RegisteredUsers");
-                        referenceProfile.child(user.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "Register completed, Please verify your email", Toast.LENGTH_SHORT).show();
-                                    // Going back to login activity
-                                    Intent loginActivity = new Intent(RegisterActivity.this, LoginActivity.class);
-                                    // Prevents from user to go back.
-                                    loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(loginActivity);
+                    // Extracting user reference from database for "RegisteredUsers"
+                    DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("RegisteredUsers");
+                    referenceProfile.child(user.getUid()).setValue(writeUserDetails).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Register completed, Please verify your email", Toast.LENGTH_SHORT).show();
+                            // Going back to login activity
+                            Intent loginActivity = new Intent(RegisterActivity.this, LoginActivity.class);
+                            // Prevents from user to go back.
+                            loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(loginActivity);
 
-                                    finish(); // to close this activity
-                                } else {
-                                    Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                            finish(); // to close this activity
+                        } else {
+                            Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
-                            }
-                        });
+                    });
 
-                    }
                 });
             }
-        }, error -> runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }));
+            // Instead of new runnable, using () because no values needed in runnable
+        }, error -> runOnUiThread(() -> Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show()));
     }
 }

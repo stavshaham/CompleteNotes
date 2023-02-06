@@ -107,7 +107,19 @@
                 android:textSize="18sp"
                 tools:ignore="TextContrastCheck" />
 
-
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                android:onClick="forgotPasswordOnClick"
+                android:padding="8dp"
+                android:text="@string/forgot_your_password"
+                android:textColor="@color/lavender"
+                android:textSize="18sp"
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
