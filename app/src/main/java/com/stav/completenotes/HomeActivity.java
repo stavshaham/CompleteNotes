@@ -128,6 +128,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    public void onClickProfilePicture(View view) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfilePictureFragment());
+    }
+
     //Checking back pressed
     @Override
     public void onBackPressed() {

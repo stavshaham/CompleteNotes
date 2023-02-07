@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/LAB1/AndroidStudioProjects/CompleteNotes/app/src/main/res/layout/activity_login.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/LAB1/AndroidStudioProjects/CompleteNotes/app/src/main/res/layout/fragment_profile_picture.xml" value="0.2997416020671835" />
+        <entry key="..\:/Users/LAB1/AndroidStudioProjects/CompleteNotes/app/src/main/res/layout/fragment_user.xml" value="0.25663716814159293" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
