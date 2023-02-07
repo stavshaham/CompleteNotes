@@ -25,7 +25,7 @@ public class UserFragment extends Fragment {
 
     private TextView textViewWelcome, textViewName, textViewEmail, textViewDoB, textViewGender, textViewPhone;
     private String name, email, dob, gender, phone, username;
-    private ImageView imageView, genderImageView;
+    private ImageView genderImageView;
 
     private FirebaseHandler firebaseHandler;
     private FirebaseAuth auth;
@@ -63,41 +63,6 @@ public class UserFragment extends Fragment {
     private void showUserProfile(FirebaseUser user) {
         String uid = user.getUid();
 
-        // Extract the details from user
-//        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("RegisteredUsers");
-//        referenceProfile.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                ReadWriteUserDetails readUserDetails = snapshot.getValue(ReadWriteUserDetails.class);
-//                if (readUserDetails != null) {
-//                    name = user.getDisplayName();
-//                    email = user.getEmail();
-//                    dob = readUserDetails.getDob();
-//                    username = readUserDetails.getUsername();
-//                    phone = readUserDetails.getPhone();
-//                    gender = readUserDetails.getGender();
-//
-//                    textViewWelcome.setText("Welcome " + name);
-//                    textViewName.setText(username);
-//                    textViewEmail.setText(email);
-//                    textViewDoB.setText(dob);
-//                    textViewGender.setText(gender);
-//                    textViewPhone.setText(phone);
-//
-//                    if (gender.equalsIgnoreCase("male")) {
-//                        genderImageView.setImageResource(R.drawable.ic_baseline_male_24);
-//                    } else {
-//                        genderImageView.setImageResource(R.drawable.ic_baseline_female_24);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         firebaseHandler.extractUserDetails(uid, userDetails -> {
             name = user.getDisplayName();
             email = user.getEmail();
@@ -120,4 +85,5 @@ public class UserFragment extends Fragment {
             }
         });
     }
+
 }

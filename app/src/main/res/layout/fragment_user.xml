@@ -18,11 +18,12 @@
 
             <ImageView
                 android:id="@+id/imageview_profile"
-                android:layout_width="150dp"
+                android:layout_width="172dp"
                 android:layout_height="150dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/logo"
-                tools:ignore="ImageContrastCheck" />
+                android:background="@drawable/user_default"
+                android:onClick="onClickProfilePicture"
+                tools:ignore="ImageContrastCheck,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/text_show_welcome"
@@ -31,7 +32,7 @@
                 android:layout_below="@id/imageview_profile"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="5dp"
-                android:hint="Loading..."
+                android:hint="@string/loading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/white"
                 tools:ignore="TextContrastCheck" />
