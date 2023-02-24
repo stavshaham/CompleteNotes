@@ -1,4 +1,4 @@
-package com.stav.completenotes;
+package com.stav.completenotes.firebase;
 
 public class ReadWriteUserDetails {
     private String username, gender, phone, dob;

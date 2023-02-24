@@ -1,8 +1,6 @@
-package com.stav.completenotes;
+package com.stav.completenotes.firebase;
 
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -16,11 +14,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.stav.completenotes.Listener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class FirebaseHandler implements Executor {
@@ -92,7 +87,6 @@ public class FirebaseHandler implements Executor {
     }
 
     public void extractUserDetails(String uid, Listener<ReadWriteUserDetails> listener) {
-        Log.i("AC", " " + uid);
         ReadWriteUserDetails userDetails = new ReadWriteUserDetails();
 
         // Extract the details from user
@@ -119,7 +113,14 @@ public class FirebaseHandler implements Executor {
         });
     }
 
+    public void saveUserDetails(String username, String phone, String dob, String gender, FirebaseUser user) {
+        // Enter data into realtime firebase
+        ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(username, gender, phone, dob);
 
+        // Extracting user reference from database for "RegisteredUsers"
+        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("RegisteredUsers");
+        referenceProfile.child(user.getUid()).setValue(writeUserDetails);
+    }
 
     public FirebaseAuth getAuth() {
         return FirebaseAuth.getInstance();

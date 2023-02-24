@@ -1,7 +1,7 @@
 package com.stav.completenotes;
 
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,16 +13,22 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.stav.completenotes.firebase.FirebaseHandler;
 
-public class UserSettingsFragment extends Fragment {
+import java.util.Calendar;
+
+public class UserSettingsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FirebaseHandler firebaseHandler;
     private FirebaseAuth auth;
@@ -31,6 +37,8 @@ public class UserSettingsFragment extends Fragment {
     private TextView textViewWelcome;
     private String name, email, dob, username, phone, gender;
     private ImageView genderImageView;
+    private DatePickerDialog picker;
+
 
 
     @Override
@@ -55,7 +63,6 @@ public class UserSettingsFragment extends Fragment {
         editTextPhone = view.findViewById(R.id.edit_text_phone);
 
         textViewWelcome = view.findViewById(R.id.text_show_welcome);
-
         genderImageView = view.findViewById(R.id.ic_gender);
 
         FirebaseUser user = auth.getCurrentUser();
@@ -75,6 +82,52 @@ public class UserSettingsFragment extends Fragment {
         editTextEmail.setOnClickListener(v -> {
             alertDialogBuilder("Change your email", "Enter your new email", editTextEmail, "email");
         });
+
+        editTextDate.setOnClickListener(v -> {
+            final Calendar cal = Calendar.getInstance();
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int month = cal.get(Calendar.MONTH);
+            int year = cal.get(Calendar.YEAR);
+
+            picker = new DatePickerDialog(getContext(), R.style.AppTheme_DialogTheme, (vw, year1, month1, dayOfMonth) ->
+                    editTextDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1), year, month, day);
+
+            picker.show();
+        });
+
+        editTextGender.setOnClickListener(v -> {
+            final String[] genders = {"Male", "Female"};
+            Spinner dropdown = new Spinner(getContext());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, genders);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dropdown.setAdapter(adapter);
+            dropdown.setOnItemSelectedListener(this);
+        });
+
+        saveBtn.setOnClickListener(v -> firebaseHandler.saveUserDetails(editTextName.getText().toString(),
+                editTextPhone.getText().toString(), editTextDate.getText().toString(),
+                editTextGender.getText().toString(), user));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                editTextGender.setText("Male");
+                genderImageView.setImageResource(R.drawable.ic_baseline_male_24);
+                break;
+            case 1:
+                editTextGender.setText("Female");
+                genderImageView.setImageResource(R.drawable.ic_baseline_female_24);
+                break;
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     private void showUserProfile(FirebaseUser user) {
